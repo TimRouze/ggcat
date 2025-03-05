@@ -11,6 +11,9 @@
 #include <string>
 #include <type_traits>
 #include <utility>
+#if __cplusplus >= 202002L
+#include <ranges>
+#endif
 
 namespace rust {
 inline namespace cxxbridge1 {
@@ -48,6 +51,10 @@ public:
   String(const char *, std::size_t);
   String(const char16_t *);
   String(const char16_t *, std::size_t);
+#if __cplusplus >= 202002L
+  String(const char8_t *s);
+  String(const char8_t *s, std::size_t len);
+#endif
 
   static String lossy(const std::string &) noexcept;
   static String lossy(const char *) noexcept;
@@ -55,8 +62,8 @@ public:
   static String lossy(const char16_t *) noexcept;
   static String lossy(const char16_t *, std::size_t) noexcept;
 
-  String &operator=(const String &) &noexcept;
-  String &operator=(String &&) &noexcept;
+  String &operator=(const String &) & noexcept;
+  String &operator=(String &&) & noexcept;
 
   explicit operator std::string() const;
 
@@ -111,8 +118,8 @@ template <>
 struct copy_assignable_if<false> {
   copy_assignable_if() noexcept = default;
   copy_assignable_if(const copy_assignable_if &) noexcept = default;
-  copy_assignable_if &operator=(const copy_assignable_if &) &noexcept = delete;
-  copy_assignable_if &operator=(copy_assignable_if &&) &noexcept = default;
+  copy_assignable_if &operator=(const copy_assignable_if &) & noexcept = delete;
+  copy_assignable_if &operator=(copy_assignable_if &&) & noexcept = default;
 };
 } // namespace detail
 
@@ -126,10 +133,10 @@ public:
   Slice(T *, std::size_t count) noexcept;
 
   template <typename C>
-  explicit Slice(C& c) : Slice(c.data(), c.size()) {}
+  explicit Slice(C &c) : Slice(c.data(), c.size()) {}
 
-  Slice &operator=(const Slice<T> &) &noexcept = default;
-  Slice &operator=(Slice<T> &&) &noexcept = default;
+  Slice &operator=(const Slice<T> &) & noexcept = default;
+  Slice &operator=(Slice<T> &&) & noexcept = default;
 
   T *data() const noexcept;
   std::size_t size() const noexcept;
@@ -164,7 +171,11 @@ private:
 template <typename T>
 class Slice<T>::iterator final {
 public:
+#if __cplusplus >= 202002L
+  using iterator_category = std::contiguous_iterator_tag;
+#else
   using iterator_category = std::random_access_iterator_tag;
+#endif
   using value_type = T;
   using difference_type = std::ptrdiff_t;
   using pointer = typename std::add_pointer<T>::type;
@@ -182,6 +193,9 @@ public:
   iterator &operator+=(difference_type) noexcept;
   iterator &operator-=(difference_type) noexcept;
   iterator operator+(difference_type) const noexcept;
+  friend inline iterator operator+(difference_type lhs, iterator rhs) noexcept {
+    return rhs + lhs;
+  }
   iterator operator-(difference_type) const noexcept;
   difference_type operator-(const iterator &) const noexcept;
 
@@ -197,6 +211,11 @@ private:
   void *pos;
   std::size_t stride;
 };
+
+#if __cplusplus >= 202002L
+static_assert(std::ranges::contiguous_range<rust::Slice<const uint8_t>>);
+static_assert(std::contiguous_iterator<rust::Slice<const uint8_t>::iterator>);
+#endif
 
 template <typename T>
 Slice<T>::Slice() noexcept {
@@ -415,7 +434,7 @@ public:
   Vec(Vec &&) noexcept;
   ~Vec() noexcept;
 
-  Vec &operator=(Vec &&) &noexcept;
+  Vec &operator=(Vec &&) & noexcept;
   Vec &operator=(const Vec &) &;
 
   std::size_t size() const noexcept;
@@ -489,7 +508,7 @@ Vec<T>::~Vec() noexcept {
 }
 
 template <typename T>
-Vec<T> &Vec<T>::operator=(Vec &&other) &noexcept {
+Vec<T> &Vec<T>::operator=(Vec &&other) & noexcept {
   this->drop();
   this->repr = other.repr;
   new (&other) Vec();
@@ -788,10 +807,10 @@ private:
 ::GGCATInstanceFFI const *ggcat_create(::GGCATConfigFFI config) noexcept;
 
 // Builds a new graph from the given input files, with the specified parameters
-::rust::String ggcat_build_from_files(::GGCATInstanceFFI const &instance, ::rust::Slice<::rust::String const> input_files, ::rust::String output_file, ::rust::Slice<::rust::String const> color_names, ::std::size_t kmer_length, ::std::size_t threads_count, bool forward_only, ::std::size_t minimizer_length, bool colors, ::std::size_t min_multiplicity, ::std::size_t extra_elab, ::std::uint32_t gfa_output_version, ::std::uint32_t disk_optimization_level) noexcept;
+::rust::String ggcat_build_from_files(::GGCATInstanceFFI const &instance, ::rust::Slice<::rust::String const> input_files, ::rust::String output_file, ::rust::Slice<::rust::String const> color_names, ::std::size_t kmer_length, ::std::size_t threads_count, bool forward_only, ::std::size_t minimizer_length, bool colors, ::std::size_t min_multiplicity, ::std::size_t max_multiplicity, ::std::size_t extra_elab, ::std::uint32_t gfa_output_version, ::std::uint32_t disk_optimization_level) noexcept;
 
 // Builds a new graph from the given input streams, with the specified parameters
-::rust::String ggcat_build_from_streams(::GGCATInstanceFFI const &instance, ::rust::Slice<::InputStreamFFI const> input_streams, ::rust::String output_file, ::rust::Slice<::rust::String const> color_names, ::std::size_t kmer_length, ::std::size_t threads_count, bool forward_only, ::std::size_t minimizer_length, bool colors, ::std::size_t min_multiplicity, ::std::size_t extra_elab, ::std::uint32_t gfa_output_version, ::std::uint32_t disk_optimization_level) noexcept;
+::rust::String ggcat_build_from_streams(::GGCATInstanceFFI const &instance, ::rust::Slice<::InputStreamFFI const> input_streams, ::rust::String output_file, ::rust::Slice<::rust::String const> color_names, ::std::size_t kmer_length, ::std::size_t threads_count, bool forward_only, ::std::size_t minimizer_length, bool colors, ::std::size_t min_multiplicity, ::std::size_t max_multiplicity, ::std::size_t extra_elab, ::std::uint32_t gfa_output_version, ::std::uint32_t disk_optimization_level) noexcept;
 
 // Queries a (optionally) colored graph with a specific set of sequences as queries
 ::rust::String ggcat_query_graph(::GGCATInstanceFFI const &instance, ::rust::String input_graph, ::rust::String input_query, ::rust::String output_file_prefix, ::std::size_t kmer_length, ::std::size_t threads_count, bool forward_only, ::std::size_t minimizer_length, bool colors, ::std::size_t color_output_format) noexcept;

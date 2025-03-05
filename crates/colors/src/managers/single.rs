@@ -83,6 +83,7 @@ impl ColorsMergeManager for SingleColorManager {
         _map: &mut FxHashMap<MH::HashTypeUnextendable, MapEntry<Self::HashMapTempColorIndex>>,
         _k: usize,
         _min_multiplicity: usize,
+        _max_multiplicity: usize,
     ) {
     }
 

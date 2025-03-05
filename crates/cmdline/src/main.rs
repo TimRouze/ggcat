@@ -152,6 +152,10 @@ struct AssemblerArgs {
     #[structopt(short = "s", long = "min-multiplicity", default_value = "2")]
     pub min_multiplicity: usize,
 
+    /// Maximum multiplicity required to keep a kmer
+    #[structopt(short = "z", long = "max-multiplicity", default_value = "999999")]
+    pub max_multiplicity: usize,
+
     // /// Minimum correctness probability for each kmer (using fastq quality checks)
     // #[structopt(short = "q", long = "quality-threshold")]
     // pub quality_threshold: Option<f64>,
@@ -445,6 +449,7 @@ fn run_assembler_from_args(instance: &GGCATInstance, args: AssemblerArgs) {
             args.common_args.minimizer_length,
             args.colors,
             args.min_multiplicity,
+            args.max_multiplicity,
             if args.generate_maximal_unitigs_links {
                 ExtraElaboration::UnitigLinks
             } else if args.greedy_matchtigs {

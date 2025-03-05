@@ -211,6 +211,8 @@ impl<MH: HashFunctionFactory, CX: ColorsManager, const COMPUTE_SIMPLITIGS: bool>
                 let crossed_min_abundance =
                     entry.incr_by_and_check(multiplicity, global_data.min_multiplicity);
 
+                let crossed_max_abundance = entry.get_kmer_multiplicity() > global_data.max_multiplicity;
+
                 CX::ColorsMergeManagerType::add_temp_buffer_structure_el::<MH>(
                     &mut map_packet.temp_colors,
                     &kmer_color,
@@ -219,7 +221,7 @@ impl<MH: HashFunctionFactory, CX: ColorsManager, const COMPUTE_SIMPLITIGS: bool>
                 );
 
                 // Update the valid indexes to allow saving reads that cross the min abundance threshold
-                if !MH::INVERTIBLE && crossed_min_abundance {
+                if !MH::INVERTIBLE && crossed_min_abundance && !crossed_max_abundance {
                     min_idx = min(min_idx, idx / 4);
                     max_idx = max(max_idx, idx);
                 }

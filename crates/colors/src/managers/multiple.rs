@@ -246,6 +246,7 @@ impl ColorsMergeManager for MultipleColorsManager {
         map: &mut FxHashMap<MH::HashTypeUnextendable, MapEntry<Self::HashMapTempColorIndex>>,
         k: usize,
         min_multiplicity: usize,
+        max_multiplicity: usize,
     ) {
         for buffer in data.sequences.iter_mut() {
             data.temp_colors_buffer.clear();
@@ -295,7 +296,7 @@ impl ColorsMergeManager for MultipleColorsManager {
                         tmp
                     };
 
-                    if entry.get_kmer_multiplicity() < min_multiplicity {
+                    if entry.get_kmer_multiplicity() < min_multiplicity || entry.get_kmer_multiplicity() > max_multiplicity{
                         continue;
                     }
 

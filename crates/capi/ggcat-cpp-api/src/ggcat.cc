@@ -38,6 +38,8 @@ std::string GGCATInstance::build_graph_from_files(
     size_t threads_count,
     bool forward_only,
     size_t min_multiplicity,
+
+    size_t max_multiplicity,
     ExtraElaborationStep extra_elab,
     bool colors,
     Slice<std::string> color_names,
@@ -69,6 +71,7 @@ std::string GGCATInstance::build_graph_from_files(
                                            minimizer_length,
                                            colors,
                                            min_multiplicity,
+                                           max_multiplicity,
                                            extra_elab,
                                            gfa_output_version,
                                            disk_optimization_level);
@@ -82,6 +85,7 @@ std::string GGCATInstance::build_graph_internal_ffi(
     size_t threads_count,
     bool forward_only,
     size_t min_multiplicity,
+    size_t max_multiplicity,
     ExtraElaborationStep extra_elab,
     bool colors,
     Slice<std::string> color_names,
@@ -118,6 +122,7 @@ std::string GGCATInstance::build_graph_internal_ffi(
                                              minimizer_length,
                                              colors,
                                              min_multiplicity,
+                                             max_multiplicity,
                                              extra_elab,
                                              output_gfa,
                                              disk_optimization_level);

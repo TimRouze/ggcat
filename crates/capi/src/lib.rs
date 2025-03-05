@@ -81,6 +81,10 @@ fn ggcat_build(
     // Minimum multiplicity required to keep a kmer
     min_multiplicity: usize,
 
+    // Maximum multiplicity required to keep a kmer
+    max_multiplicity: usize,
+
+    
     // Extra elaboration step
     extra_elab: usize,
 
@@ -116,6 +120,7 @@ fn ggcat_build(
             },
             colors,
             min_multiplicity,
+            max_multiplicity,
             match extra_elab {
                 EXTRA_ELABORATION_STEP_NONE => ExtraElaboration::None,
                 EXTRA_ELABORATION_STEP_UNITIG_LINKS => ExtraElaboration::UnitigLinks,
@@ -164,6 +169,10 @@ fn ggcat_build_from_files(
     // Minimum multiplicity required to keep a kmer
     min_multiplicity: usize,
 
+    // Maximum multiplicity required to keep a kmer
+    max_multiplicity: usize,
+            
+
     // Extra elaboration step
     extra_elab: usize,
 
@@ -194,6 +203,7 @@ fn ggcat_build_from_files(
         minimizer_length,
         colors,
         min_multiplicity,
+        max_multiplicity,
         extra_elab,
         gfa_output_version,
         disk_optimization_level,
@@ -226,6 +236,8 @@ fn ggcat_build_from_streams(
     // Minimum multiplicity required to keep a kmer
     min_multiplicity: usize,
 
+    // Maximum multiplicity required to keep a kmer
+    max_multiplicity: usize,
     // Extra elaboration step
     extra_elab: usize,
 
@@ -327,6 +339,7 @@ fn ggcat_build_from_streams(
         minimizer_length,
         colors,
         min_multiplicity,
+        max_multiplicity,
         extra_elab,
         gfa_output_version,
         disk_optimization_level,
@@ -606,6 +619,9 @@ mod ffi {
             // Minimum multiplicity required to keep a kmer
             min_multiplicity: usize,
 
+            // Maximum multiplicity required to keep a kmer
+            max_multiplicity: usize,
+
             // Extra elaboration step
             extra_elab: usize,
 
@@ -643,6 +659,8 @@ mod ffi {
             // Minimum multiplicity required to keep a kmer
             min_multiplicity: usize,
 
+            // Maximum multiplicity required to keep a kmer
+            max_multiplicity: usize,
             // Extra elaboration step
             extra_elab: usize,
 

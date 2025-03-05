@@ -233,6 +233,8 @@ impl GGCATInstance {
         // Minimum multiplicity required to keep a kmer
         min_multiplicity: usize,
 
+        max_multiplicity: usize,
+
         extra_elab: ExtraElaboration,
 
         gfa_output_version: Option<GfaVersion>,
@@ -297,6 +299,7 @@ impl GGCATInstance {
             temp_dir.clone(),
             threads_count,
             min_multiplicity,
+            max_multiplicity,
             *debug::BUCKETS_COUNT_LOG_FORCE.lock(),
             Some(debug::DEBUG_LINK_PHASE_ITERATION_START_STEP.load(Ordering::Relaxed)),
             self.0.intermediate_compression_level,

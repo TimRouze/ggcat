@@ -189,6 +189,7 @@ namespace ggcat
             size_t threads_count,
             bool forward_only,
             size_t min_multiplicity,
+            size_t max_multiplicity,
             ExtraElaborationStep extra_elab,
             bool colors,
             Slice<std::string> color_names,
@@ -218,6 +219,9 @@ namespace ggcat
 
             // Minimum multiplicity required to keep a kmer
             size_t min_multiplicity = 1,
+
+            // Max multiplicity required to keep a kmer
+            size_t max_multiplicity = 999999,
 
             // Extra elaboration step
             ExtraElaborationStep extra_elab = ExtraElaborationStep_None,
@@ -257,6 +261,9 @@ namespace ggcat
 
             // Minimum multiplicity required to keep a kmer
             size_t min_multiplicity = 1,
+
+            // Maximum multiplicity required to keep a kmer
+            size_t max_multiplicity = 999999,
 
             // Extra elaboration step
             ExtraElaborationStep extra_elab = ExtraElaborationStep_None,
@@ -313,6 +320,7 @@ namespace ggcat
                                             threads_count,
                                             forward_only,
                                             min_multiplicity,
+                                            max_multiplicity,
                                             extra_elab,
                                             colors,
                                             color_names,

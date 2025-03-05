@@ -165,6 +165,7 @@ pub trait ColorsMergeManager: Sized {
         map: &mut FxHashMap<MH::HashTypeUnextendable, MapEntry<Self::HashMapTempColorIndex>>,
         k: usize,
         min_multiplicity: usize,
+        max_multiplicity: usize,
     );
 
     /// Struct used to hold color information about unitigs

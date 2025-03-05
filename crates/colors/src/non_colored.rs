@@ -182,6 +182,7 @@ impl ColorsMergeManager for NonColoredManager {
         >,
         _k: usize,
         _min_multiplicity: usize,
+        _max_multiplicity: usize,
     ) {
         unreachable!()
     }

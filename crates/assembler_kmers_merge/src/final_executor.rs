@@ -78,7 +78,7 @@ impl<MH: HashFunctionFactory, CX: ColorsManager, const COMPUTE_SIMPLITIGS: bool>
         if MH::INVERTIBLE {
             for (hash, rhentry) in map_struct.rhash_map.iter() {
                 let count = rhentry.get_kmer_multiplicity();
-                if count < global_data.min_multiplicity {
+                if count < global_data.min_multiplicity || count > global_data.max_multiplicity{
                     continue;
                 }
 
@@ -135,7 +135,7 @@ impl<MH: HashFunctionFactory, CX: ColorsManager, const COMPUTE_SIMPLITIGS: bool>
                     };
 
                     let count = rhentry.get_kmer_multiplicity();
-                    if count < global_data.min_multiplicity {
+                    if count < global_data.min_multiplicity || count > global_data.max_multiplicity{
                         continue;
                     }
 
@@ -196,6 +196,7 @@ impl<MH: HashFunctionFactory, CX: ColorsManager, const COMPUTE_SIMPLITIGS: bool>
                 &mut map_struct.rhash_map,
                 global_data.k,
                 global_data.min_multiplicity,
+                global_data.max_multiplicity
             );
         }
 
@@ -280,7 +281,7 @@ impl<MH: HashFunctionFactory, CX: ColorsManager, const COMPUTE_SIMPLITIGS: bool>
                             if let Some(hash) =
                                 map_struct.rhash_map.get(&new_hash.to_unextendable())
                             {
-                                if hash.get_kmer_multiplicity() >= global_data.min_multiplicity {
+                                if hash.get_kmer_multiplicity() >= global_data.min_multiplicity && hash.get_kmer_multiplicity() <= global_data.max_multiplicity{
                                     // ggcat_logging::info!("Forward match extend read {:x?}!", new_hash);
                                     #[cfg(feature = "support_kmer_counters")]
                                     {
@@ -324,8 +325,7 @@ impl<MH: HashFunctionFactory, CX: ColorsManager, const COMPUTE_SIMPLITIGS: bool>
                                     if let Some(hash) =
                                         map_struct.rhash_map.get(&bw_hash.to_unextendable())
                                     {
-                                        if hash.get_kmer_multiplicity()
-                                            >= global_data.min_multiplicity
+                                        if hash.get_kmer_multiplicity() >= global_data.min_multiplicity && hash.get_kmer_multiplicity() <= global_data.max_multiplicity
                                         {
                                             if ocount > 0 {
                                                 break 'ext_loop (current_hash, false);

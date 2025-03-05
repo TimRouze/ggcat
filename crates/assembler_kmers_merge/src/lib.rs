@@ -46,6 +46,7 @@ pub struct GlobalMergeData<CX: ColorsManager> {
     m: usize,
     buckets_count: usize,
     min_multiplicity: usize,
+    max_multiplicity: usize,
     colors_global_table: Arc<GlobalColorsTableWriter<CX>>,
     output_results_buckets:
         ArrayQueue<ResultsBucket<color_types::PartialUnitigsColorStructure<CX>>>,
@@ -138,6 +139,7 @@ pub fn kmers_merge<MH: HashFunctionFactory, CX: ColorsManager, P: AsRef<Path> + 
     colors_global_table: Arc<GlobalColorsTableWriter<CX>>,
     buckets_count: usize,
     min_multiplicity: usize,
+    max_multiplicity: usize,
     out_directory: P,
     k: usize,
     m: usize,
@@ -200,6 +202,7 @@ pub fn kmers_merge<MH: HashFunctionFactory, CX: ColorsManager, P: AsRef<Path> + 
         m,
         buckets_count,
         min_multiplicity,
+        max_multiplicity,
         colors_global_table,
         output_results_buckets,
         hashes_buckets: hashes_buckets.clone(),
@@ -301,6 +304,7 @@ mod tests {
         let m = 12;
         let threads_count = 16;
         let min_multiplicity = 1;
+        let max_multiplicity = 999999;
 
         // Increase the maximum allowed number of open files
         let _ = fdlimit::raise_fd_limit();
@@ -342,6 +346,7 @@ mod tests {
             global_colors_table.clone(),
             buckets_count,
             min_multiplicity,
+            max_multiplicity,
             Path::new(TEMP_DIR),
             k,
             m,
